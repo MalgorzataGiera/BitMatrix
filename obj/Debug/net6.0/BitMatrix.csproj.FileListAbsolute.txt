@@ -1,0 +1,15 @@
+D:\c#\#obiektowe\BitMatrix\bin\Debug\net6.0\BitMatrix.exe
+D:\c#\#obiektowe\BitMatrix\bin\Debug\net6.0\BitMatrix.deps.json
+D:\c#\#obiektowe\BitMatrix\bin\Debug\net6.0\BitMatrix.runtimeconfig.json
+D:\c#\#obiektowe\BitMatrix\bin\Debug\net6.0\BitMatrix.dll
+D:\c#\#obiektowe\BitMatrix\bin\Debug\net6.0\BitMatrix.pdb
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.csproj.AssemblyReference.cache
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.GeneratedMSBuildEditorConfig.editorconfig
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.AssemblyInfoInputs.cache
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.AssemblyInfo.cs
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.csproj.CoreCompileInputs.cache
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.dll
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\refint\BitMatrix.dll
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.pdb
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\BitMatrix.genruntimeconfig.cache
+D:\c#\#obiektowe\BitMatrix\obj\Debug\net6.0\ref\BitMatrix.dll
