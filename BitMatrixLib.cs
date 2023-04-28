@@ -5,7 +5,7 @@ using System.Text;
 
 // prostokątna macierz bitów o wymiarach m x n
 // prostokątna macierz bitów o wymiarach m x n
-public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>
+public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
 {
     private BitArray data;
 
@@ -145,17 +145,17 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>
     {
         get
         {
-            if (row > NumberOfRows -1 || col > NumberOfColumns -1) throw new IndexOutOfRangeException();
+            if (row > NumberOfRows - 1 || col > NumberOfColumns - 1) throw new IndexOutOfRangeException();
             if (row < 0 || col < 0) throw new IndexOutOfRangeException();
             return BoolToBit(data[row * NumberOfColumns + col]);
         }
-        
-         set
+
+        set
         {
-            if (row > NumberOfRows -1 || col > NumberOfColumns -1) throw new IndexOutOfRangeException();
+            if (row > NumberOfRows - 1 || col > NumberOfColumns - 1) throw new IndexOutOfRangeException();
             if (row < 0 || col < 0) throw new IndexOutOfRangeException();
             if (value != 0) data[row * NumberOfColumns + col] = BitToBool(1);
-            else data[row * NumberOfColumns + col] = BitToBool(0);   
+            else data[row * NumberOfColumns + col] = BitToBool(0);
         }
     }
     // numerator
@@ -166,8 +166,14 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>
             yield return BoolToBit(data[i]);
         }
     }
-    IEnumerator IEnumerable.GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    public BitMatrix Clone()
     {
-        throw new NotImplementedException();
+        var result = new BitMatrix(NumberOfRows, NumberOfColumns);
+        for (int i = 0; i < data.Length; i++)
+            result.data[i] = this.data[i];
+        return result;
     }
+
+    object ICloneable.Clone() => Clone();
 }
