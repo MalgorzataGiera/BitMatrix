@@ -8,7 +8,6 @@ using System.Text;
 public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
 {
     private BitArray data;
-
     public int NumberOfRows { get; }
     public int NumberOfColumns { get; }
     public bool IsReadOnly => false;
@@ -167,6 +166,7 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
         }
     }
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     public BitMatrix Clone()
     {
         var result = new BitMatrix(NumberOfRows, NumberOfColumns);
@@ -174,6 +174,47 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
             result.data[i] = this.data[i];
         return result;
     }
-
     object ICloneable.Clone() => Clone();
+
+    public static BitMatrix Parse(string s)
+    {
+        if (String.IsNullOrEmpty(s)) throw new ArgumentNullException();
+        string[] splitted = s.Split($"{Environment.NewLine}", StringSplitOptions.RemoveEmptyEntries);
+        if (splitted.Length < 0) throw new FormatException();
+        var result = new BitMatrix(splitted.Length, splitted[0].Length);
+
+        for (int i = 0; i < splitted.Length; i++)
+        {
+            if (splitted[i].Length != splitted[0].Length) throw new FormatException();
+            for (int j = 0; j < splitted[0].Length; j++)
+            {
+                char c = splitted[i][j];
+                if (c != '0' && c != '1') throw new FormatException();
+                result[i, j] = c == '1' ? 1 : 0;
+            }
+        }
+        return result;
+    }
+
+    public static bool TryParse(string s, out BitMatrix result)
+    {
+        result = new BitMatrix(2, 2);
+        
+        if (s == null) return false;
+        string[] splitted = s.Split($"{Environment.NewLine}", StringSplitOptions.RemoveEmptyEntries);
+        if (splitted.Length < 0) return false;
+        result = new BitMatrix(splitted.Length, splitted[0].Length);
+
+        for (int i = 0; i < splitted.Length; i++)
+        {
+            if (splitted[i].Length != splitted[0].Length) return false;
+            for (int j = 0; j < splitted[0].Length; j++)
+            {
+                char c = splitted[i][j];
+                if (c != '0' && c != '1') return false;
+                result[i, j] = c == '1' ? 1 : 0;
+            }
+        }
+        return true;
+    }
 }
