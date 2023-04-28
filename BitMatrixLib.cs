@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Text;
 
+
 // prostokątna macierz bitów o wymiarach m x n
 // prostokątna macierz bitów o wymiarach m x n
-public partial class BitMatrix
+public class BitMatrix : IEquatable<BitMatrix>
 {
     private BitArray data;
    
@@ -94,4 +95,49 @@ public partial class BitMatrix
             }
         }
     }
+
+    public override string ToString()
+    {
+        string result = "";
+        for (int i = 0; i < NumberOfRows; i++)
+        {
+            for (int j = 0; j < NumberOfColumns; j++)
+            {
+                result += BoolToBit(data[i * NumberOfColumns + j]);
+            }
+            result += (Environment.NewLine);
+        }
+        return result;
+    }
+    public bool Equals(BitMatrix other)
+    {
+        if (ReferenceEquals(this, other)) return true;
+        if (other == null || this == null) return false;
+        if (NumberOfRows != other.NumberOfRows || NumberOfColumns != other.NumberOfColumns) return false;
+
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] != other.data[i]) return false;
+
+        }
+        return true;
+        
+    }
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as BitMatrix);
+    }
+    public override int GetHashCode()
+    {
+        return GetHashCode();
+    }
+    public static bool operator ==(BitMatrix m1, BitMatrix m2)
+    {
+        if (ReferenceEquals(m1, m2)) return true;
+        if ((object)m1 == null || (object)m2 == null) return false;
+        return m1.Equals(m2);
+    }
+    public static bool operator !=(BitMatrix m1, BitMatrix m2) => !(m1 == m2);
+
+
 }
