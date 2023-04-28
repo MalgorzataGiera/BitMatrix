@@ -5,10 +5,10 @@ using System.Text;
 
 // prostokątna macierz bitów o wymiarach m x n
 // prostokątna macierz bitów o wymiarach m x n
-public class BitMatrix : IEquatable<BitMatrix>
+public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>
 {
     private BitArray data;
-   
+
     public int NumberOfRows { get; }
     public int NumberOfColumns { get; }
     public bool IsReadOnly => false;
@@ -19,7 +19,7 @@ public class BitMatrix : IEquatable<BitMatrix>
         if (numberOfRows < 1 || numberOfColumns < 1)
             throw new ArgumentOutOfRangeException("Incorrect size of matrix");
         data = new BitArray(numberOfRows * numberOfColumns, BitToBool(defaultValue));
-        
+
         NumberOfRows = numberOfRows;
         NumberOfColumns = numberOfColumns;
     }
@@ -61,13 +61,13 @@ public class BitMatrix : IEquatable<BitMatrix>
         int k = 0;
         for (int i = 0; i < bits.GetLength(0); i++)
         {
-            for (int j = 0; j < bits.GetLength(1); j ++)
+            for (int j = 0; j < bits.GetLength(1); j++)
             {
-                if (bits[i,j] != 0)
-                    bits[i,j] = 1;
-                if (bits[i,j] == 1)
+                if (bits[i, j] != 0)
+                    bits[i, j] = 1;
+                if (bits[i, j] == 1)
                     data[k] = true;
-                if (bits[i,j] == 0)
+                if (bits[i, j] == 0)
                     data[k] = false;
                 k++;
             }
@@ -121,7 +121,7 @@ public class BitMatrix : IEquatable<BitMatrix>
 
         }
         return true;
-        
+
     }
     public override bool Equals(object obj)
     {
@@ -131,6 +131,7 @@ public class BitMatrix : IEquatable<BitMatrix>
     {
         return GetHashCode();
     }
+
     public static bool operator ==(BitMatrix m1, BitMatrix m2)
     {
         if (ReferenceEquals(m1, m2)) return true;
@@ -139,5 +140,34 @@ public class BitMatrix : IEquatable<BitMatrix>
     }
     public static bool operator !=(BitMatrix m1, BitMatrix m2) => !(m1 == m2);
 
-
+    // indexer
+    public int this[int row, int col]
+    {
+        get
+        {
+            if (row > NumberOfRows -1 || col > NumberOfColumns -1) throw new IndexOutOfRangeException();
+            if (row < 0 || col < 0) throw new IndexOutOfRangeException();
+            return BoolToBit(data[row * NumberOfColumns + col]);
+        }
+        
+         set
+        {
+            if (row > NumberOfRows -1 || col > NumberOfColumns -1) throw new IndexOutOfRangeException();
+            if (row < 0 || col < 0) throw new IndexOutOfRangeException();
+            if (value != 0) data[row * NumberOfColumns + col] = BitToBool(1);
+            else data[row * NumberOfColumns + col] = BitToBool(0);   
+        }
+    }
+    // numerator
+    public IEnumerator<int> GetEnumerator()
+    {
+        for (int i = 0; i < data.Length; i++)
+        {
+            yield return BoolToBit(data[i]);
+        }
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
 }
