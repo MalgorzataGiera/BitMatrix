@@ -199,7 +199,7 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
     public static bool TryParse(string s, out BitMatrix result)
     {
         result = new BitMatrix(2, 2);
-        
+
         if (s == null) return false;
         string[] splitted = s.Split($"{Environment.NewLine}", StringSplitOptions.RemoveEmptyEntries);
         if (splitted.Length < 0) return false;
@@ -216,5 +216,96 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
             }
         }
         return true;
+    }
+
+    // konwersje
+
+    //public static explicit operator BitMatrix(int[,] tab)
+    //{
+    //    if (tab == null) throw new NullReferenceException();
+    //    if (tab.Length < 1) throw new ArgumentOutOfRangeException();
+    //    var result = new BitMatrix(tab.GetLength(0), tab.GetLength(1));
+    //    for (int i = 0; i < result.NumberOfRows; i++)
+    //    {
+    //        for (int j = 0; j < result.NumberOfColumns; j++)
+    //            result[i,j] = tab[i,j];
+    //    }
+    //    return result;
+    //}
+
+    //public static implicit operator BitMatrix(int[,] tab)
+    //{
+    //    if (tab == null) throw new NullReferenceException();
+    //    if (tab.Length < 1) throw new ArgumentOutOfRangeException();
+    //    var result = new BitMatrix(tab.GetLength(0), tab.GetLength(1));
+    //    for (int i = 0; i < result.NumberOfRows; i++)
+    //    {
+    //        for (int j = 0; j < result.NumberOfColumns; j++)
+    //            result[i, j] = BitMatrix.BoolToBit(tab[i, j] != 0);
+    //    }
+    //    return result;
+    //}
+
+    public static explicit operator BitMatrix(int[,] matrix)
+    {
+        int rows = matrix.GetLength(0);
+        int cols = matrix.GetLength(1);
+        BitMatrix result = new BitMatrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                result[i, j] = BoolToBit(matrix[i, j] != 0);
+            }
+        }
+        return result;
+    }
+
+    public static implicit operator int[,](BitMatrix m)
+    {
+        var result = new int[m.NumberOfRows, m.NumberOfColumns];
+        for (int i = 0; i < m.NumberOfRows; i++)
+        {
+            for (int j = 0; j < m.NumberOfColumns; j++)
+                result[i, j] = m[i,j] == 1 ? 1 : 0;
+        }
+        return result;
+    }
+
+    public static explicit operator BitMatrix(bool[,] tab)
+    {
+        if (tab == null) throw new NullReferenceException();
+        if (tab.Length < 1) throw new ArgumentOutOfRangeException();
+        var result = new BitMatrix(tab.GetLength(0), tab.Length / tab.GetLength(0));
+        for (int i = 0; i < result.NumberOfRows; i++)
+        {
+            for (int j = 0; j < result.NumberOfColumns; j++)
+                result.data[i * result.NumberOfColumns + j] = tab[i, j] == true ? true : false;
+        }
+        return result;
+    }
+
+    public static implicit operator bool[,](BitMatrix m)
+    {
+        var result = new bool[m.NumberOfRows, m.NumberOfColumns];
+        for (int i = 0; i < m.NumberOfRows; i++)
+        {
+            for (int j = 0; j < m.NumberOfColumns; j++)
+                result[i, j] = m[i, j] == 1 ? true : false;
+        }
+        return result;
+    }
+
+    public static explicit operator BitArray(BitMatrix m)
+    {
+        var result = new BitArray(m.NumberOfRows * m.NumberOfColumns);
+        for (int i = 0; i < m.NumberOfRows; i++)
+        {
+            for (int j = 0; j < m.NumberOfColumns; j++)
+            {
+                result[i * m.NumberOfColumns + j] = BitToBool(m[i, j]);
+            }
+        }
+        return result;
     }
 }
