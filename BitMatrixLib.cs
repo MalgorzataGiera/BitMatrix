@@ -220,32 +220,6 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
 
     // konwersje
 
-    //public static explicit operator BitMatrix(int[,] tab)
-    //{
-    //    if (tab == null) throw new NullReferenceException();
-    //    if (tab.Length < 1) throw new ArgumentOutOfRangeException();
-    //    var result = new BitMatrix(tab.GetLength(0), tab.GetLength(1));
-    //    for (int i = 0; i < result.NumberOfRows; i++)
-    //    {
-    //        for (int j = 0; j < result.NumberOfColumns; j++)
-    //            result[i,j] = tab[i,j];
-    //    }
-    //    return result;
-    //}
-
-    //public static implicit operator BitMatrix(int[,] tab)
-    //{
-    //    if (tab == null) throw new NullReferenceException();
-    //    if (tab.Length < 1) throw new ArgumentOutOfRangeException();
-    //    var result = new BitMatrix(tab.GetLength(0), tab.GetLength(1));
-    //    for (int i = 0; i < result.NumberOfRows; i++)
-    //    {
-    //        for (int j = 0; j < result.NumberOfColumns; j++)
-    //            result[i, j] = BitMatrix.BoolToBit(tab[i, j] != 0);
-    //    }
-    //    return result;
-    //}
-
     public static explicit operator BitMatrix(int[,] matrix)
     {
         int rows = matrix.GetLength(0);
@@ -308,4 +282,106 @@ public class BitMatrix : IEquatable<BitMatrix>, IEnumerable<int>, ICloneable
         }
         return result;
     }
+    // logiczne operacje bitowe 
+    public BitMatrix And(BitMatrix other) 
+    {
+        if (other == null) throw new ArgumentNullException();
+        if (NumberOfRows != other.NumberOfRows || NumberOfColumns != other.NumberOfColumns) throw new ArgumentException();
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == false && other.data[i] == false) data[i] = false;
+            if (data[i] == false && other.data[i] == true) data[i] = false;
+            if (data[i] == true && other.data[i] == false) data[i] = false;
+            if (data[i] == true && other.data[i] == true) data[i] = true;
+        }
+        return this;
+    }
+    public BitMatrix Or(BitMatrix other)
+    {
+        if (other == null) throw new ArgumentNullException();
+        if (NumberOfRows != other.NumberOfRows || NumberOfColumns != other.NumberOfColumns) throw new ArgumentException();
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == false && other.data[i] == false) data[i] = false;
+            else data[i] = true;
+        }
+        return this;
+    }
+    public BitMatrix Xor(BitMatrix other)
+    {
+        if (other == null) throw new ArgumentNullException();
+        if (NumberOfRows != other.NumberOfRows || NumberOfColumns != other.NumberOfColumns) throw new ArgumentException();
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == other.data[i]) data[i] = false; 
+            else data[i] = true;
+        }
+        return this;
+    }
+    public BitMatrix Not()
+    {
+        if (this == null) throw new ArgumentNullException();
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == true) data[i] = false;
+            else data[i] = true;
+        }
+        return this;
+    }
+    
+    // operatory binarne
+    public static BitMatrix operator &(BitMatrix m1, BitMatrix m2)
+    {
+        if (m1 == null || m2 == null) throw new ArgumentNullException();
+        if (m1.NumberOfRows != m2.NumberOfRows || m1.NumberOfColumns != m2.NumberOfColumns) throw new ArgumentException();
+
+        var m3 = new BitMatrix(m1.NumberOfRows, m1.NumberOfColumns);
+        for (int i = 0; i < m1.data.Length; i++)
+        {
+            if (m1.data[i] == false && m2.data[i] == false) m3.data[i] = false;
+            if (m1.data[i] == false && m2.data[i] == true) m3.data[i] = false;
+            if (m1.data[i] == true && m2.data[i] == false) m3.data[i] = false;
+            if (m1.data[i] == true && m2.data[i] == true) m3.data[i] = true;
+        }
+        return m3;
+    }
+    public static BitMatrix operator |(BitMatrix m1, BitMatrix m2)
+    {
+
+        if (m1 == null || m2 == null) throw new ArgumentNullException();
+        if (m1.NumberOfRows != m2.NumberOfRows || m1.NumberOfColumns != m2.NumberOfColumns) throw new ArgumentException();
+        var m3 = new BitMatrix(m1.NumberOfRows, m1.NumberOfColumns);
+        for (int i = 0; i < m1.data.Length; i++)
+        {
+            if (m1.data[i] == false && m2.data[i] == false) m3.data[i] = false;
+            else m3.data[i] = true;
+        }
+        return m3;
+    }
+    public static BitMatrix operator ^(BitMatrix m1, BitMatrix m2)
+    {
+
+        if (m1 == null || m2 == null) throw new ArgumentNullException();
+        if (m1.NumberOfRows != m2.NumberOfRows || m1.NumberOfColumns != m2.NumberOfColumns) throw new ArgumentException();
+        var m3 = new BitMatrix(m1.NumberOfRows, m1.NumberOfColumns);
+        for (int i = 0; i < m1.data.Length; i++)
+        {
+            if (m1.data[i] == m2.data[i]) m3.data[i] = false;
+            if (m1.data[i] != m2.data[i]) m3.data[i] = true;
+        }
+        return m3;
+    }
+    public static BitMatrix operator !(BitMatrix m1)
+    {
+        if (m1 == null) throw new ArgumentNullException();
+        var m2 = new BitMatrix(m1.NumberOfRows, m1.NumberOfColumns);
+        for (int i = 0; i < m1.data.Length; i++)
+        {
+            if (m1.data[i] == true) m2.data[i] = false;
+            if (m1.data[i] == false) m2.data[i] = true;
+        }
+        return m2;
+    }
+
+
 }
